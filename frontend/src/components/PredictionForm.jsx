@@ -66,9 +66,18 @@ function FieldInput({ field, value, onChange }) {
           className={`input-field ${isMoney ? "!pl-11" : ""} ${errorMsg ? "!border-red-300 focus:!border-red-500 focus:!ring-red-200" : ""}`}
         />
       </div>
-      {errorMsg && (
-        <p className="text-[11px] font-semibold text-red-500">{errorMsg}</p>
-      )}
+      <div className="mt-1 flex items-start justify-between gap-2 min-h-[16px]">
+        {errorMsg ? (
+          <p className="text-[11px] font-semibold text-red-500">{errorMsg}</p>
+        ) : (
+          <div />
+        )}
+        {isMoney && value !== "" && !Number.isNaN(Number(value)) && (
+          <p className="text-[11px] font-medium text-slate-400 text-right">
+            ≈ {new Intl.NumberFormat("id-ID", { style: "currency", currency: "IDR", minimumFractionDigits: 0 }).format(Number(value) * 182)}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

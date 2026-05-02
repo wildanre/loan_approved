@@ -98,7 +98,7 @@ function App() {
       {/* ── Main area ── */}
       <div className="flex flex-1 flex-col lg:ml-64">
         {/* Top bar */}
-        <header className="sticky top-0 z-20 flex h-14 items-center gap-4 border-b border-slate-100 bg-white/90 px-5 backdrop-blur-md">
+        <header className="lg:hidden sticky top-0 z-20 flex h-14 items-center gap-4 border-b border-slate-100 bg-white/90 px-5 backdrop-blur-md">
           <button
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden p-2 -ml-1 rounded-lg text-slate-500 hover:bg-slate-100 transition"
@@ -111,12 +111,6 @@ function App() {
             <h1 className="text-sm font-semibold text-slate-400">
               ML-Powered Loan Approval Classifier
             </h1>
-          </div>
-          <div className="ml-auto flex items-center gap-2">
-            <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-              <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-emerald-500 inline-block" />
-              Backend Live
-            </span>
           </div>
         </header>
 

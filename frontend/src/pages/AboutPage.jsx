@@ -2,10 +2,12 @@ import { Database, Layers, Code2 } from "lucide-react";
 import { MODEL_COLORS } from "../constants/models.js";
 
 const techStack = [
-  { name: "React 18", group: "Frontend" },
-  { name: "Vite 5", group: "Frontend" },
-  { name: "Tailwind CSS", group: "Frontend" },
-  { name: "Recharts", group: "Frontend" },
+  { name: "React 19", group: "Frontend" },
+  { name: "React Router 7", group: "Frontend" },
+  { name: "Vite 8", group: "Frontend" },
+  { name: "Tailwind CSS 3", group: "Frontend" },
+  { name: "Recharts 3", group: "Frontend" },
+  { name: "Framer Motion 12", group: "Frontend" },
   { name: "FastAPI", group: "Backend" },
   { name: "SQLite", group: "Backend" },
   { name: "SQLAlchemy", group: "Backend" },
