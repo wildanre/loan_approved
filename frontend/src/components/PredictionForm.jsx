@@ -41,7 +41,7 @@ function FieldInput({ field, value, onChange }) {
           max={field.max}
           value={value}
           onChange={onChange}
-          className={`input-field ${isMoney ? "pl-9" : ""}`}
+          className={`input-field ${isMoney ? "!pl-11" : ""}`}
         />
       </div>
     </label>

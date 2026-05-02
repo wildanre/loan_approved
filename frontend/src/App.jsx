@@ -1,10 +1,25 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { NavLink, Route, Routes } from "react-router-dom";
 import { BarChart3, ClipboardList, Info, Menu, X, Zap } from "lucide-react";
-import AboutPage from "./pages/AboutPage.jsx";
-import DashboardPage from "./pages/DashboardPage.jsx";
-import HistoryPage from "./pages/HistoryPage.jsx";
-import PredictPage from "./pages/PredictPage.jsx";
+import { Skeleton } from "./components/ui/Skeleton.jsx";
+
+const AboutPage = lazy(() => import("./pages/AboutPage.jsx"));
+const DashboardPage = lazy(() => import("./pages/DashboardPage.jsx"));
+const HistoryPage = lazy(() => import("./pages/HistoryPage.jsx"));
+const PredictPage = lazy(() => import("./pages/PredictPage.jsx"));
+
+function PageLoader() {
+  return (
+    <div className="space-y-6 animate-pulse">
+      <div>
+         <Skeleton className="h-4 w-32 mb-2" />
+         <Skeleton className="h-8 w-64 mb-3" />
+         <Skeleton className="h-4 w-96" />
+      </div>
+      <Skeleton className="h-[400px] w-full rounded-2xl" />
+    </div>
+  );
+}
 
 const navItems = [
   { to: "/", label: "Prediksi", icon: Zap, desc: "Simulasi real-time" },
@@ -107,12 +122,14 @@ function App() {
 
         {/* Page content */}
         <main className="flex-1 px-5 py-7 lg:px-8">
-          <Routes>
-            <Route path="/" element={<PredictPage />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/about" element={<AboutPage />} />
-          </Routes>
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<PredictPage />} />
+              <Route path="/history" element={<HistoryPage />} />
+              <Route path="/dashboard" element={<DashboardPage />} />
+              <Route path="/about" element={<AboutPage />} />
+            </Routes>
+          </Suspense>
         </main>
       </div>
     </div>

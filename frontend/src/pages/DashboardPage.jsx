@@ -1,20 +1,19 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { fetchMetrics } from "../api/client.js";
 import MetricDashboard from "../components/MetricDashboard.jsx";
+import { DashboardSkeleton } from "../components/ui/Skeleton.jsx";
 
 /**
  * Dashboard page displaying evaluation metrics of the currently deployed ML models.
  */
 function DashboardPage() {
-  const [metrics, setMetrics] = useState(null);
-
-  useEffect(() => {
-    fetchMetrics().then((data) => {
-      // API currently nests metrics under "tuning" if generated from deployed tuned models
-      const activeMetrics = data.tuning || data.baseline || data;
-      setMetrics(activeMetrics);
-    }).catch(() => setMetrics(null));
-  }, []);
+  const { data: metrics, isLoading } = useQuery({
+    queryKey: ["metrics"],
+    queryFn: async () => {
+      const data = await fetchMetrics();
+      return data.tuning || data.baseline || data;
+    },
+  });
 
   return (
     <div>
@@ -37,7 +36,9 @@ function DashboardPage() {
         </div>
       </div>
 
-      {metrics && Object.keys(metrics).length > 0 ? (
+      {isLoading ? (
+        <DashboardSkeleton />
+      ) : metrics && Object.keys(metrics).length > 0 ? (
         <MetricDashboard data={metrics} />
       ) : (
         <div className="card flex h-48 items-center justify-center text-sm text-slate-400">

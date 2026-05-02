@@ -130,44 +130,79 @@ function MetricDashboard({ data }) {
       </section>
 
       {/* Confusion matrices */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        {Object.entries(data).map(([model, metrics]) => (
-          <section key={model} className="card p-5">
-            <h3 className="text-sm font-bold text-slate-700 mb-4">
-              {model}{" "}
-              <span className="text-slate-400 font-normal">— Confusion Matrix</span>
-            </h3>
-            <div className="grid grid-cols-2 gap-2 text-center">
-              {Object.entries(metrics.confusion_matrix).map(([key, value]) => {
-                const isPositive = key === "TP" || key === "TN";
-                return (
+      <section className="card p-8 overflow-x-auto">
+        <h2 className="text-base font-bold text-ink text-center mb-8">
+          Confusion Matrix Model Setelah Hyperparameter Tuning
+        </h2>
+        <div className="grid sm:grid-cols-2">
+          {Object.entries(data).map(([model, metrics]) => {
+            const cmValues = Object.values(metrics.confusion_matrix);
+            const maxVal = Math.max(...cmValues);
+
+            return (
+              <div key={model} className="flex flex-col items-center mb-8">
+              <h3 className="text-sm font-semibold text-slate-700 mb-6 text-center">
+                {model}
+              </h3>
+              
+              <div className="flex flex-col items-center">
+                <div className="flex">
+                  {/* Y-axis title */}
                   <div
-                    key={key}
-                    className={`rounded-xl p-4 ${
-                      isPositive ? "bg-emerald-50" : "bg-red-50"
-                    }`}
+                    className="flex items-center justify-center mr-2"
+                    style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
                   >
-                    <p
-                      className={`text-[11px] font-bold uppercase tracking-widest ${
-                        isPositive ? "text-emerald-600" : "text-red-600"
-                      }`}
-                    >
-                      {key}
-                    </p>
-                    <p
-                      className={`mt-1 text-2xl font-black ${
-                        isPositive ? "text-emerald-700" : "text-red-700"
-                      }`}
-                    >
-                      {value}
-                    </p>
+                    <span className="text-xs font-medium text-slate-700">True label</span>
                   </div>
-                );
-              })}
-            </div>
-          </section>
-        ))}
-      </div>
+                  
+                  {/* Y-axis ticks */}
+                  <div className="flex flex-col justify-around text-xs text-slate-600 mr-2">
+                    <span>Ditolak</span>
+                    <span>Disetujui</span>
+                  </div>
+
+                  {/* Grid */}
+                  <div>
+                    <div className="grid grid-cols-2 border-t border-l border-slate-300">
+                      {Object.entries(metrics.confusion_matrix).map(([key, value]) => {
+                        // Dynamic alpha for Blues colormap effect
+                        const alpha = maxVal > 0 ? value / maxVal : 0;
+                        // Use a slightly darker base blue (like scikit-learn Blues)
+                        const bgColor = `rgba(8, 48, 107, ${Math.max(0.02, alpha)})`;
+                        const textColor = alpha > 0.4 ? "#ffffff" : "#08306b";
+
+                        return (
+                          <div
+                            key={key}
+                            className="flex items-center justify-center w-28 h-28 border-r border-b border-slate-300 transition-colors"
+                            style={{ backgroundColor: bgColor }}
+                          >
+                            <span className="text-sm" style={{ color: textColor }}>
+                              {value}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                    
+                    {/* X-axis ticks */}
+                    <div className="flex justify-around text-xs text-slate-600 mt-2">
+                      <span>Ditolak</span>
+                      <span>Disetujui</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* X-axis title */}
+                <div className="mt-2 text-xs font-medium text-slate-700 ml-12">
+                  Predicted label
+                </div>
+              </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
     </div>
   );
 }
