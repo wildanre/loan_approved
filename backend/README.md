@@ -13,6 +13,26 @@ uvicorn app.main:app --reload
 
 API tersedia di `http://localhost:8000/api`.
 
+## Menjalankan dengan Docker
+
+Dari root project:
+
+```bash
+docker compose up -d --build
+```
+
+API tersedia di `http://localhost:8000/api`.
+
+Database SQLite disimpan di volume Docker `backend_data` melalui path container `/app/data/loansight.db`.
+
+Perintah operasional:
+
+```bash
+docker compose logs -f backend
+docker compose restart backend
+docker compose down
+```
+
 ## Model `.joblib`
 
 Letakkan model final di `models/`:

@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 from collections.abc import Generator
 from datetime import datetime
+from pathlib import Path
 from typing import Annotated
 
 from fastapi import Depends
@@ -10,7 +11,8 @@ from sqlalchemy import JSON, DateTime, Integer, String, create_engine
 from sqlalchemy.orm import DeclarativeBase, Mapped, Session, mapped_column, sessionmaker
 
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./loansight.db")
+DEFAULT_DB_PATH = Path(__file__).resolve().parents[2] / "data" / "loansight.db"
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{DEFAULT_DB_PATH}")
 
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 engine = create_engine(DATABASE_URL, connect_args=connect_args)
@@ -33,6 +35,9 @@ class PredictionRecord(Base):
 
 
 def init_db() -> None:
+    if DATABASE_URL.startswith("sqlite:///"):
+        db_path = Path(DATABASE_URL.replace("sqlite:///", "", 1))
+        db_path.parent.mkdir(parents=True, exist_ok=True)
     Base.metadata.create_all(bind=engine)
 
 
