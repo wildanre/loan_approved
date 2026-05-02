@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #256DB1;
+  --primary-dark: #1a5490;
+  --primary-light: #D6E8F7;
+  --success: #27AE60;
+  --danger: #C0392B;
+  --surface: #F0F4FA;
+  --card: #ffffff;
+  --ink: #1a2332;
+  --ink-muted: #5a6a7e;
+  --border: #e2e8f0;
+  color: var(--ink);
+  background: var(--surface);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Custom scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #c8d6e5; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #a0b4c8; }
+
+button, input, select, textarea { font: inherit; }
+
+/* ── Focus ring ── */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2;
+}
+
+/* ── Glass card ── */
+.card {
+  background: var(--card);
+  border-radius: 1.5rem;
+  border: 1px solid rgba(37, 109, 177, 0.08);
+  box-shadow: 0 4px 24px rgba(37, 109, 177, 0.07), 0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* ── Badge base ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.badge-approved {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.badge-rejected {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+/* ── Input base ── */
+.input-base {
+  @apply w-full rounded-xl border border-slate-200 bg-slate-50/80 px-4 py-2.5 text-sm transition
+         focus:border-primary/40 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20;
+}
+
+/* ── Section label ── */
+.section-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+/* ── Sidebar ── */
+@layer components {
+  .sidebar-link {
+    @apply flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-slate-500
+           transition-all duration-200 hover:text-primary;
+  }
+  .sidebar-link:hover {
+    background-color: rgba(37, 109, 177, 0.08);
+  }
+  .sidebar-link.active {
+    @apply bg-primary text-white shadow-md;
+  }
+}
+
+/* ── Progress bar animation ── */
+@keyframes grow-bar {
+  from { width: 0; }
+}
+.animated-bar {
+  animation: grow-bar 0.7s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* ── Pulse dot ── */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .6; transform: scale(0.8); }
+}
+.pulse-dot {
+  animation: pulse-dot 1.8s ease-in-out infinite;
+}

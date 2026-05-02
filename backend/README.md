@@ -1,0 +1,33 @@
+# LoanSight Backend
+
+FastAPI backend untuk klasifikasi kelayakan pinjaman nasabah.
+
+## Menjalankan
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+API tersedia di `http://localhost:8000/api`.
+
+## Model `.joblib`
+
+Letakkan model final di `models/`:
+
+- `logistic_regression_tuned.joblib`
+- `random_forest_tuned.joblib`
+- `lightgbm_tuned.joblib`
+- `catboost_tuned.joblib`
+
+Jika file belum ada, backend memakai fallback predictor deterministik agar demo end-to-end tetap bisa berjalan.
+
+## Preprocessing
+
+Feature engineering mengikuti notebook `analisis_komparasi_algoritma_loan_approval.ipynb`:
+
+- `total_assets_value = residential_assets_value + commercial_assets_value + luxury_assets_value + bank_asset_value`
+- `rasio_pinjaman_pendapatan = loan_amount / income_annum`
+- `rasio_agunan_pinjaman = total_assets_value / loan_amount`
