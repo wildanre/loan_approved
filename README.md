@@ -23,7 +23,7 @@ Backend berjalan di `http://localhost:8000`.
 docker compose up -d --build
 ```
 
-Backend berjalan di `http://localhost:8000`.
+Backend berjalan di `http://localhost:3001`.
 
 Database SQLite dipersistenkan di volume Docker `backend_data`.
 
@@ -53,13 +53,13 @@ docker compose logs -f backend
 Cek health:
 
 ```bash
-curl http://SERVER_IP:8000/api/health
+curl http://SERVER_IP:3001/api/health
 ```
 
 Jika memakai firewall:
 
 ```bash
-sudo ufw allow 8000/tcp
+sudo ufw allow 3001/tcp
 ```
 
 ## Menjalankan Frontend

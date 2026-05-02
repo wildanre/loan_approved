@@ -8,9 +8,11 @@ services:
     environment:
       DATABASE_URL: sqlite:////app/data/loansight.db
     ports:
-      - "8000:8000"
+      - "3001:8000"
     volumes:
       - backend_data:/app/data
+    networks:
+      - loansight_network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
@@ -20,3 +22,10 @@ services:
 
 volumes:
   backend_data:
+
+networks:
+  loansight_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.50.0.0/24

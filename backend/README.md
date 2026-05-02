@@ -21,7 +21,7 @@ Dari root project:
 docker compose up -d --build
 ```
 
-API tersedia di `http://localhost:8000/api`.
+API tersedia di `http://localhost:3001/api`.
 
 Database SQLite disimpan di volume Docker `backend_data` melalui path container `/app/data/loansight.db`.
 
