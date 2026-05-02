@@ -27,6 +27,27 @@ Backend berjalan di `http://localhost:3001`.
 
 Database SQLite dipersistenkan di volume Docker `backend_data`.
 
+## Redeploy Backend ke VPS
+
+Redeploy manual ke VPS:
+
+```bash
+./scripts/deploy-backend-vps.sh
+```
+
+Default script:
+
+- SSH target: `gcloud`
+- Remote directory: `/home/wildanwae354/apps/loansight`
+- Direct API: `http://api-loansight.staifdev.codes:3001/api`
+- HTTPS API: `https://api-loansight.staifdev.codes/api`
+
+Override target jika diperlukan:
+
+```bash
+SSH_TARGET=gcloud REMOTE_DIR=/home/wildanwae354/apps/loansight ./scripts/deploy-backend-vps.sh
+```
+
 ## Deploy Backend ke VPS
 
 Contoh untuk VPS Ubuntu:
@@ -50,10 +71,16 @@ docker compose up -d --build
 docker compose logs -f backend
 ```
 
-Cek health:
+Cek health direct port:
 
 ```bash
 curl http://SERVER_IP:3001/api/health
+```
+
+Cek health HTTPS:
+
+```bash
+curl https://api-loansight.staifdev.codes/api/health
 ```
 
 Jika memakai firewall:

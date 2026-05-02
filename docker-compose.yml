@@ -7,12 +7,25 @@ services:
     restart: unless-stopped
     environment:
       DATABASE_URL: sqlite:////app/data/loansight.db
+    labels:
+      traefik.enable: "true"
+      traefik.docker.network: easypanel
+      traefik.http.routers.loansight-api-http.rule: Host(`api-loansight.staifdev.codes`)
+      traefik.http.routers.loansight-api-http.entrypoints: http
+      traefik.http.routers.loansight-api-http.middlewares: loansight-api-redirect
+      traefik.http.middlewares.loansight-api-redirect.redirectscheme.scheme: https
+      traefik.http.routers.loansight-api-https.rule: Host(`api-loansight.staifdev.codes`)
+      traefik.http.routers.loansight-api-https.entrypoints: https
+      traefik.http.routers.loansight-api-https.tls: "true"
+      traefik.http.routers.loansight-api-https.tls.certresolver: letsencrypt
+      traefik.http.services.loansight-api.loadbalancer.server.port: "8000"
     ports:
       - "3001:8000"
     volumes:
       - backend_data:/app/data
     networks:
       - loansight_network
+      - easypanel
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
       interval: 30s
@@ -29,3 +42,5 @@ networks:
     ipam:
       config:
         - subnet: 172.31.250.0/24
+  easypanel:
+    external: true

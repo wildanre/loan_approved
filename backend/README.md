@@ -25,6 +25,19 @@ API tersedia di `http://localhost:3001/api`.
 
 Database SQLite disimpan di volume Docker `backend_data` melalui path container `/app/data/loansight.db`.
 
+## Redeploy ke VPS
+
+Dari root project:
+
+```bash
+./scripts/deploy-backend-vps.sh
+```
+
+Endpoint production:
+
+- `https://api-loansight.staifdev.codes/api`
+- health check: `https://api-loansight.staifdev.codes/api/health`
+
 Perintah operasional:
 
 ```bash
