@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Brain } from "lucide-react";
@@ -46,8 +46,26 @@ function EmptyState() {
  */
 function PredictPage() {
   const queryClient = useQueryClient();
-  const [values, setValues] = useState(PredictionForm.defaultValues);
-  const [result, setResult] = useState(null);
+  const [values, setValues] = useState(() => {
+    const saved = sessionStorage.getItem("predict_values");
+    return saved ? JSON.parse(saved) : PredictionForm.defaultValues;
+  });
+  const [result, setResult] = useState(() => {
+    const saved = sessionStorage.getItem("predict_result");
+    return saved ? JSON.parse(saved) : null;
+  });
+
+  useEffect(() => {
+    sessionStorage.setItem("predict_values", JSON.stringify(values));
+  }, [values]);
+
+  useEffect(() => {
+    if (result) {
+      sessionStorage.setItem("predict_result", JSON.stringify(result));
+    } else {
+      sessionStorage.removeItem("predict_result");
+    }
+  }, [result]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
