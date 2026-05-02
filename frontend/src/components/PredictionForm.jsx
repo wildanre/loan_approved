@@ -13,22 +13,36 @@ import {
  */
 function FieldInput({ field, value, onChange }) {
   const isMoney = MONEY_FIELD_NAMES.has(field.name);
+  let errorMsg = null;
+  if (value === "") {
+    errorMsg = "Wajib diisi";
+  } else {
+    const num = Number(value);
+    if (field.min !== undefined && num < field.min) {
+      errorMsg = `Minimal ${field.min}`;
+    } else if (field.max !== undefined && num > field.max) {
+      errorMsg = `Maksimal ${field.max}`;
+    }
+  }
+
   return (
-    <label key={field.name} className="block space-y-2">
-      <span className="flex items-center gap-1.5 text-sm font-semibold text-slate-700">
-        {field.label}
+    <div key={field.name} className="block space-y-1.5">
+      <div className="flex items-center gap-1.5 mb-2">
+        <label htmlFor={field.name} className="text-sm font-semibold text-slate-700 cursor-pointer">
+          {field.label}
+        </label>
         {field.unit && (
           <span className="text-slate-400 font-normal text-xs">({field.unit})</span>
         )}
         {field.tooltip && (
           <span
             title="CIBIL Score adalah skor kredit India dengan rentang 300–900. Semakin tinggi skor, semakin baik riwayat kredit."
-            className="cursor-help"
+            className="cursor-help relative z-10"
           >
-            <Info size={14} className="text-primary opacity-70" />
+            <Info size={14} className="text-primary opacity-70 hover:opacity-100 transition-opacity" />
           </span>
         )}
-      </span>
+      </div>
       <div className="relative">
         {isMoney && (
           <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-sm text-slate-400 font-semibold">
@@ -36,15 +50,19 @@ function FieldInput({ field, value, onChange }) {
           </span>
         )}
         <input
+          id={field.name}
           type="number"
           min={field.min}
           max={field.max}
           value={value}
           onChange={onChange}
-          className={`input-field ${isMoney ? "!pl-11" : ""}`}
+          className={`input-field ${isMoney ? "!pl-11" : ""} ${errorMsg ? "!border-red-300 focus:!border-red-500 focus:!ring-red-200" : ""}`}
         />
       </div>
-    </label>
+      {errorMsg && (
+        <p className="text-[11px] font-semibold text-red-500">{errorMsg}</p>
+      )}
+    </div>
   );
 }
 
