@@ -35,12 +35,19 @@ function FieldInput({ field, value, onChange }) {
           <span className="text-slate-400 font-normal text-xs">({field.unit})</span>
         )}
         {field.tooltip && (
-          <span
-            title="CIBIL Score adalah skor kredit India dengan rentang 300–900. Semakin tinggi skor, semakin baik riwayat kredit."
-            className="cursor-help relative z-10"
-          >
-            <Info size={14} className="text-primary opacity-70 hover:opacity-100 transition-opacity" />
-          </span>
+          <div className="group relative z-20 flex items-center">
+            <Info size={14} className="text-primary opacity-70 hover:opacity-100 transition-opacity cursor-help" />
+            
+            {/* Custom Tooltip */}
+            <div className="pointer-events-none absolute bottom-full left-1/2 mb-2 w-52 -translate-x-1/2 translate-y-1 opacity-0 transition-all duration-200 group-hover:translate-y-0 group-hover:opacity-100">
+              <div className="rounded-lg bg-slate-800 px-3 py-2.5 text-center text-[11px] font-medium text-white shadow-xl leading-relaxed">
+                CIBIL Score adalah skor kredit India dengan rentang 300–900. Semakin tinggi skor, semakin baik riwayat kredit.
+                
+                {/* Tooltip Arrow */}
+                <div className="absolute left-1/2 top-full -mt-px -translate-x-1/2 border-[5px] border-transparent border-t-slate-800" />
+              </div>
+            </div>
+          </div>
         )}
       </div>
       <div className="relative">
