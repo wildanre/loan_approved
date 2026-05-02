@@ -61,14 +61,17 @@ function PredictionForm({ values, setValues, onSubmit, loading, onReset, hasResu
         name.includes("score") ||
         name.includes("term") ||
         name.includes("dependents")
-          ? Number(value)
+          ? (value === "" ? "" : Number(value))
           : value,
     }));
   };
 
   // Validate fields against their min/max constraints
   const isInvalid = NUMERIC_FIELDS.some((field) => {
-    const value = Number(values[field.name]);
+    const rawValue = values[field.name];
+    if (rawValue === "") return true;
+    
+    const value = Number(rawValue);
     return (
       Number.isNaN(value) ||
       value < field.min ||

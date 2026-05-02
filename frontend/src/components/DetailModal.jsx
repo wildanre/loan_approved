@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { formatPercent, formatRupee } from "../utils/currency.js";
 import { INPUT_LABELS, MONEY_FIELD_NAMES } from "../constants/fields.js";
+import { BEST_MODEL_NAME } from "../constants/models.js";
 
 /**
  * Modal to display detailed information about a specific prediction record.
@@ -58,47 +59,104 @@ function DetailModal({ item, onClose }) {
           </section>
 
           {/* Right: Model outputs */}
-          <section>
+          <section className="flex flex-col">
             <h3 className="mb-3 text-xs font-bold uppercase tracking-widest text-slate-400">
               Output Model
             </h3>
-            <div className="space-y-2.5">
-              {item.predictions.map((prediction) => {
-                const approved = prediction.label === "Approved";
-                return (
-                  <div
-                    key={prediction.model}
-                    className="rounded-xl border border-slate-100 bg-white p-4"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-xs font-bold text-slate-700">
-                        {prediction.model}
-                      </span>
-                      <span
-                        className={`rounded-full px-3 py-0.5 text-xs font-bold ${
-                          approved
-                            ? "bg-emerald-50 text-emerald-700"
-                            : "bg-red-50 text-red-700"
-                        }`}
-                      >
-                        {prediction.label}
-                      </span>
+            
+            <div className="space-y-4">
+              {/* Best Model Section */}
+              <div className="space-y-2.5">
+                {(() => {
+                  const prediction = item.predictions.find(p => p.model === BEST_MODEL_NAME);
+                  if (!prediction) return null;
+                  const approved = prediction.label === "Approved";
+                  
+                  return (
+                    <div className="rounded-xl border-2 border-amber-100 bg-white p-4 shadow-sm relative overflow-hidden">
+                      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-amber-400 to-amber-200" />
+                      <div className="flex items-center justify-between mb-3 mt-1">
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full">
+                          Best Model
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-sm font-bold text-slate-800">
+                          {prediction.model}
+                        </span>
+                        <span
+                          className={`rounded-full px-3 py-0.5 text-xs font-bold ${
+                            approved
+                              ? "bg-emerald-50 text-emerald-700"
+                              : "bg-red-50 text-red-700"
+                          }`}
+                        >
+                          {prediction.label}
+                        </span>
+                      </div>
+                      <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100">
+                        <div
+                          className="h-full rounded-full animated-bar"
+                          style={{
+                            width: `${prediction.probability * 100}%`,
+                            background: approved ? "#16a34a" : "#dc2626",
+                          }}
+                        />
+                      </div>
+                      <p className="mt-1.5 text-right text-xs text-slate-400 font-medium">
+                        {formatPercent(prediction.probability)}
+                      </p>
                     </div>
-                    <div className="mt-3 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                  );
+                })()}
+              </div>
+
+              {/* Other Models */}
+              <div>
+                <p className="mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-400 flex items-center gap-2">
+                  <span className="h-px flex-1 bg-slate-100" />
+                  Other Models
+                  <span className="h-px flex-1 bg-slate-100" />
+                </p>
+                <div className="space-y-2.5">
+                  {item.predictions.filter(p => p.model !== BEST_MODEL_NAME).map((prediction) => {
+                    const approved = prediction.label === "Approved";
+                    return (
                       <div
-                        className="h-full rounded-full animated-bar"
-                        style={{
-                          width: `${prediction.probability * 100}%`,
-                          background: approved ? "#16a34a" : "#dc2626",
-                        }}
-                      />
-                    </div>
-                    <p className="mt-1.5 text-right text-xs text-slate-400 font-medium">
-                      {formatPercent(prediction.probability)}
-                    </p>
-                  </div>
-                );
-              })}
+                        key={prediction.model}
+                        className="rounded-xl border border-slate-100 bg-slate-50/50 p-4"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-bold text-slate-600">
+                            {prediction.model}
+                          </span>
+                          <span
+                            className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
+                              approved
+                                ? "bg-emerald-50 text-emerald-700"
+                                : "bg-red-50 text-red-700"
+                            }`}
+                          >
+                            {prediction.label}
+                          </span>
+                        </div>
+                        <div className="mt-2.5 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+                          <div
+                            className="h-full rounded-full animated-bar"
+                            style={{
+                              width: `${prediction.probability * 100}%`,
+                              background: approved ? "#4ade80" : "#f87171",
+                            }}
+                          />
+                        </div>
+                        <p className="mt-1 text-right text-[11px] text-slate-400 font-medium">
+                          {formatPercent(prediction.probability)}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
 
               {/* Consensus summary */}
               <div

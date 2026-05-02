@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Brain } from "lucide-react";
 import { predictLoan } from "../api/client.js";
@@ -44,6 +45,7 @@ function EmptyState() {
  * and displaying the resulting models' evaluations.
  */
 function PredictPage() {
+  const queryClient = useQueryClient();
   const [values, setValues] = useState(PredictionForm.defaultValues);
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -56,6 +58,8 @@ function PredictPage() {
     try {
       const data = await predictLoan(values);
       setResult(data);
+      // Invalidate history cache to ensure fresh data on next visit
+      queryClient.invalidateQueries({ queryKey: ["history"] });
     } catch (err) {
       setError(
         err.response?.data?.detail ??
@@ -75,16 +79,6 @@ function PredictPage() {
 
   return (
     <div className="space-y-8">
-      {/* Page header */}
-      <div>
-        <span className="section-label">Prediksi Pinjaman</span>
-        <h1 className="mt-1 text-2xl font-black text-ink">
-          Simulasi Kelayakan Nasabah
-        </h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Input data nasabah dan bandingkan hasil keempat algoritma sekaligus.
-        </p>
-      </div>
 
       {/* Form – full width */}
       <PredictionForm
