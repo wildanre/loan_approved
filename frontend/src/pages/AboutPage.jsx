@@ -1,4 +1,5 @@
 import { Database, Layers, Code2 } from "lucide-react";
+import { MODEL_COLORS } from "../constants/models.js";
 
 const techStack = [
   { name: "React 18", group: "Frontend" },
@@ -27,13 +28,9 @@ const datasetRows = [
   { label: "Target Label", value: "Approved / Rejected" },
 ];
 
-const models = [
-  { name: "Logistic Regression", color: "#256DB1" },
-  { name: "Random Forest", color: "#27AE60" },
-  { name: "LightGBM", color: "#7C3AED" },
-  { name: "CatBoost", color: "#D97706" },
-];
-
+/**
+ * About page displaying application information, dataset details, and tech stack.
+ */
 function AboutPage() {
   return (
     <div>
@@ -67,14 +64,14 @@ function AboutPage() {
             <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
               Model Algoritma
             </p>
-            {models.map((m) => (
-              <div key={m.name} className="flex items-center gap-3">
+            {Object.entries(MODEL_COLORS).map(([name, color]) => (
+              <div key={name} className="flex items-center gap-3">
                 <span
                   className="h-2 w-2 flex-shrink-0 rounded-full"
-                  style={{ background: m.color }}
+                  style={{ background: color }}
                 />
                 <span className="text-sm font-semibold text-slate-700">
-                  {m.name}
+                  {name}
                 </span>
               </div>
             ))}

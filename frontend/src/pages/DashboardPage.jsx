@@ -2,12 +2,18 @@ import { useEffect, useState } from "react";
 import { fetchMetrics } from "../api/client.js";
 import MetricDashboard from "../components/MetricDashboard.jsx";
 
+/**
+ * Dashboard page displaying evaluation metrics of the currently deployed ML models.
+ */
 function DashboardPage() {
   const [metrics, setMetrics] = useState(null);
-  const [mode, setMode] = useState("baseline");
 
   useEffect(() => {
-    fetchMetrics().then(setMetrics).catch(() => setMetrics(null));
+    fetchMetrics().then((data) => {
+      // API currently nests metrics under "tuning" if generated from deployed tuned models
+      const activeMetrics = data.tuning || data.baseline || data;
+      setMetrics(activeMetrics);
+    }).catch(() => setMetrics(null));
   }, []);
 
   return (
@@ -20,30 +26,19 @@ function DashboardPage() {
             Evaluasi Model Klasifikasi
           </h1>
           <p className="mt-1 text-sm text-slate-500">
-            Metrik bersumber dari hasil evaluasi notebook — JSON hardcoded.
+            Metrik performa dari model klasifikasi yang saat ini berjalan di backend.
           </p>
         </div>
 
-        {/* Toggle baseline / tuning */}
-        <div className="flex self-start sm:self-auto rounded-xl border border-slate-200 bg-slate-50 p-1 gap-1">
-          {["baseline", "tuning"].map((item) => (
-            <button
-              key={item}
-              onClick={() => setMode(item)}
-              className={`rounded-lg px-4 py-2 text-sm font-bold capitalize transition-all duration-150 ${
-                mode === item
-                  ? "bg-white text-primary shadow-sm"
-                  : "text-slate-500 hover:text-slate-700"
-              }`}
-            >
-              {item}
-            </button>
-          ))}
+        {/* Status Badge */}
+        <div className="flex self-start sm:self-auto rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2 gap-2 items-center">
+          <span className="h-2 w-2 rounded-full bg-emerald-500 pulse-dot" />
+          <span className="text-xs font-bold text-emerald-700">Tuned Models Deployed</span>
         </div>
       </div>
 
-      {metrics ? (
-        <MetricDashboard data={metrics[mode]} />
+      {metrics && Object.keys(metrics).length > 0 ? (
+        <MetricDashboard data={metrics} />
       ) : (
         <div className="card flex h-48 items-center justify-center text-sm text-slate-400">
           Metrics belum tersedia atau backend tidak aktif.

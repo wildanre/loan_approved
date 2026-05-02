@@ -13,6 +13,9 @@ const navItems = [
   { to: "/about", label: "Tentang", icon: Info, desc: "Info aplikasi" },
 ];
 
+/**
+ * Root component containing the navigation sidebar and main content router.
+ */
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

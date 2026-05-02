@@ -58,7 +58,7 @@ class MetricsValue(BaseModel):
 
 
 class MetricsResponse(BaseModel):
-    baseline: dict[str, MetricsValue]
+    baseline: dict[str, MetricsValue] | None = None
     tuning: dict[str, MetricsValue]
 
 

@@ -1,29 +1,11 @@
 import { X } from "lucide-react";
 import { formatPercent, formatRupee } from "../utils/currency.js";
+import { INPUT_LABELS, MONEY_FIELD_NAMES } from "../constants/fields.js";
 
-const inputLabels = {
-  no_of_dependents: "Jumlah Tanggungan",
-  education: "Pendidikan",
-  self_employed: "Wiraswasta",
-  income_annum: "Pendapatan Tahunan",
-  loan_amount: "Jumlah Pinjaman",
-  loan_term: "Jangka Waktu (tahun)",
-  cibil_score: "Skor CIBIL",
-  residential_assets_value: "Aset Residensial",
-  commercial_assets_value: "Aset Komersial",
-  luxury_assets_value: "Aset Mewah",
-  bank_asset_value: "Aset Bank",
-};
-
-const moneyKeys = new Set([
-  "income_annum",
-  "loan_amount",
-  "residential_assets_value",
-  "commercial_assets_value",
-  "luxury_assets_value",
-  "bank_asset_value",
-]);
-
+/**
+ * Modal to display detailed information about a specific prediction record.
+ * Shows both the input data and the outputs from all evaluated models.
+ */
 function DetailModal({ item, onClose }) {
   if (!item) return null;
 
@@ -31,6 +13,8 @@ function DetailModal({ item, onClose }) {
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm"
       onClick={(e) => e.target === e.currentTarget && onClose()}
+      aria-modal="true"
+      role="dialog"
     >
       <div className="card max-h-[88vh] w-full max-w-3xl overflow-y-auto p-0">
         {/* Header */}
@@ -44,6 +28,7 @@ function DetailModal({ item, onClose }) {
           <button
             onClick={onClose}
             className="focus-ring flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-500 transition hover:bg-slate-200"
+            aria-label="Tutup"
           >
             <X size={16} />
           </button>
@@ -62,10 +47,10 @@ function DetailModal({ item, onClose }) {
                   className="flex items-center justify-between gap-4 rounded-xl bg-slate-50 px-4 py-2.5"
                 >
                   <span className="text-xs text-slate-500">
-                    {inputLabels[key] ?? key}
+                    {INPUT_LABELS[key] ?? key}
                   </span>
                   <strong className="text-xs text-slate-800 text-right">
-                    {moneyKeys.has(key) ? formatRupee(value) : value}
+                    {MONEY_FIELD_NAMES.has(key) ? formatRupee(value) : value}
                   </strong>
                 </div>
               ))}
