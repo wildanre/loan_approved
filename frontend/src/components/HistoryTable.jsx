@@ -1,6 +1,23 @@
 import { Download, ChevronLeft, ChevronRight } from "lucide-react";
 import { formatPercent, formatRupee, toCsvValue } from "../utils/currency.js";
 
+/**
+ * Format a UTC timestamp string to a human-readable date/time string
+ * automatically adjusted to the user's local timezone and locale.
+ * Example output (WIB): "3 Mei 2025, 17.05.12"
+ */
+const userLocale = navigator.language || "id-ID";
+function formatTimestamp(raw) {
+  if (!raw) return "-";
+  // Backend stores timestamps without TZ info (assumed UTC); appending 'Z' forces correct parsing.
+  const date = new Date(raw.endsWith("Z") ? raw : raw + "Z");
+  return date.toLocaleString(userLocale, {
+    dateStyle: "medium",
+    timeStyle: "medium",
+    hour12: false,
+  });
+}
+
 function HistoryTable({ rows, filter, setFilter, page, setPage, onOpenDetail }) {
   const pageSize = 20;
   const pageCount = Math.max(Math.ceil(rows.length / pageSize), 1);
@@ -14,7 +31,7 @@ function HistoryTable({ rows, filter, setFilter, page, setPage, onOpenDetail }) 
       );
       return [
         index + 1,
-        new Date(row.timestamp).toLocaleString("id-ID"),
+        formatTimestamp(row.timestamp),
         row.input.loan_amount,
         row.input.cibil_score,
         predictions["Logistic Regression"]?.label,
@@ -113,7 +130,7 @@ function HistoryTable({ rows, filter, setFilter, page, setPage, onOpenDetail }) 
                       {(page - 1) * pageSize + index + 1}
                     </td>
                     <td className="px-4 py-3.5 text-slate-500 text-xs whitespace-nowrap">
-                      {new Date(row.timestamp).toLocaleString("id-ID")}
+                      {formatTimestamp(row.timestamp)}
                     </td>
                     <td className="px-4 py-3.5 font-semibold text-slate-800 text-xs whitespace-nowrap">
                       {formatRupee(row.input.loan_amount)}

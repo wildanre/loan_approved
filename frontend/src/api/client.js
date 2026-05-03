@@ -1,13 +1,7 @@
 import axios from "axios";
 
-/**
- * Axios instance configured for communicating with the FastAPI backend.
- * Uses environment variable VITE_API_BASE_URL if provided.
- */
 const api = axios.create({
-  // Uses relative path "/api" — the actual backend domain is NEVER exposed to the browser.
-  // In dev: Vite proxy (vite.config.js) forwards requests to the real backend server-side.
-  // In prod: Vercel rewrites (vercel.json) handle the forwarding transparently.
+
   baseURL: import.meta.env.VITE_API_BASE_URL ?? "/api",
   timeout: 10000, // 10 seconds timeout
   headers: {
@@ -19,7 +13,6 @@ const api = axios.create({
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // If we have a structured response from FastAPI, pass it along
     if (error.response && error.response.data) {
       console.error("API Error Response:", error.response.data);
     } else {

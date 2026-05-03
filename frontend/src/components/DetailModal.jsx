@@ -3,10 +3,6 @@ import { formatPercent, formatRupee } from "../utils/currency.js";
 import { INPUT_LABELS, MONEY_FIELD_NAMES } from "../constants/fields.js";
 import { BEST_MODEL_NAME } from "../constants/models.js";
 
-/**
- * Modal to display detailed information about a specific prediction record.
- * Shows both the input data and the outputs from all evaluated models.
- */
 function DetailModal({ item, onClose }) {
   if (!item) return null;
 
