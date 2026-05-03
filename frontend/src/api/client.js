@@ -5,8 +5,10 @@ import axios from "axios";
  * Uses environment variable VITE_API_BASE_URL if provided.
  */
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
-  // baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api",
+  // Uses relative path "/api" — the actual backend domain is NEVER exposed to the browser.
+  // In dev: Vite proxy (vite.config.js) forwards requests to the real backend server-side.
+  // In prod: Vercel rewrites (vercel.json) handle the forwarding transparently.
+  baseURL: import.meta.env.VITE_API_BASE_URL ?? "/api",
   timeout: 10000, // 10 seconds timeout
   headers: {
     "Content-Type": "application/json",
